@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Opciones de configuración para la conexión
+// ...existing code...
+// Opciones de configuración para la conexión
 const options = {
   // Número máximo de conexiones
   max: 10,
@@ -14,9 +16,11 @@ const options = {
   // Tiempo de espera para la conexión (en segundos)
   connect_timeout: 30,
   // Configuraciones SSL para conexiones seguras
-  ssl: true, // Render.com requiere SSL
+  ssl: {
+    rejectUnauthorized: false
+  }, // Render.com/Supabase requiere SSL
   // Permite verificar si la conexión es válida antes de usarla
-  onnotice: () => {},
+  onnotice: () => { },
   debug: process.env.NODE_ENV === 'development',
   // Reintentos de conexión
   max_lifetime: 60 * 30, // 30 minutos
@@ -25,6 +29,7 @@ const options = {
     application_name: 'autoservicio-burgers-api'
   }
 };
+// ...existing code...
 
 // Validar que tenemos la cadena de conexión
 if (!process.env.DATABASE_URL) {
@@ -47,7 +52,7 @@ export const testConnection = async () => {
     const result = await sql`SELECT NOW() as time`;
     console.log('✅ Conexión exitosa a la base de datos');
     console.log(`📅 Fecha y hora del servidor: ${result[0].time}`);
-    
+
     // Intentar obtener las tablas disponibles
     try {
       const tables = await sql`
@@ -56,7 +61,7 @@ export const testConnection = async () => {
         WHERE table_schema = 'public'
         ORDER BY table_name;
       `;
-      
+
       if (tables.length === 0) {
         console.log('📋 No se encontraron tablas en el esquema público');
       } else {
@@ -68,7 +73,7 @@ export const testConnection = async () => {
     } catch (tableError) {
       console.error('❌ No se pudieron obtener las tablas:', tableError.message);
     }
-    
+
     return true;
   } catch (error) {
     console.error('❌ Error al conectar con la base de datos:', error.message);
