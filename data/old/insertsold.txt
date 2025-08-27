@@ -1,0 +1,138 @@
+-- Datos de ejemplo actualizados para el nuevo esquema
+
+-- Inserción de productos (sin cambios)
+INSERT INTO productos (nombre, descripcion, precio_base, categoria, disponible) VALUES
+('McRaulo Cheese', 'Hamburguesa clásica con queso cheddar', 8.99, 'hamburguesa', TRUE),
+('McRaulo Veggie', 'Hamburguesa vegetariana con proteína de soja', 9.99, 'hamburguesa', TRUE),
+('McRaulo Pollo', 'Hamburguesa de pollo crujiente', 9.49, 'hamburguesa', TRUE),
+('Papas fritas', 'Papas fritas crujientes', 3.99, 'acompañamiento', TRUE),
+('Papas con cheddar', 'Papas fritas con queso cheddar derretido', 5.99, 'acompañamiento', TRUE),
+('Coca-Cola', 'Refresco de cola 500ml', 2.50, 'bebida', TRUE),
+('Sprite', 'Refresco de lima-limón 500ml', 2.50, 'bebida', TRUE),
+('Fanta', 'Refresco de naranja 500ml', 2.50, 'bebida', TRUE),
+('Limonada', 'Limonada natural 500ml', 3.50, 'bebida', TRUE),
+('Agua mineral', 'Agua mineral 500ml', 1.50, 'bebida', TRUE);
+
+-- Inserción de ingredientes (sin cambios)
+INSERT INTO ingredientes (nombre, descripcion, precio, stock, unidad_medida) VALUES
+('Pan de hamburguesa', 'Pan brioche para hamburguesa', 0.50, 500, 'unidad'),
+('Carne de res', 'Medallón de carne de res 150g', 2.50, 300, 'unidad'),
+('Pollo crispy', 'Medallón de pollo rebozado 120g', 2.00, 200, 'unidad'),
+('Medallón veggie', 'Medallón de proteína vegetal 120g', 2.50, 150, 'unidad'),
+('Queso cheddar', 'Feta de queso cheddar', 0.75, 400, 'unidad'),
+('Lechuga', 'Lechuga fresca', 0.30, 5000, 'g'),
+('Tomate', 'Rodaja de tomate', 0.40, 10000, 'g'),
+('Cebolla', 'Cebolla en rodajas', 0.30, 8000, 'g'),
+('Pepinillos', 'Pepinillos en rodajas', 0.50, 3000, 'g'),
+('Bacon', 'Tiras de bacon crujiente', 1.50, 5000, 'g'),
+('Salsa especial', 'Salsa especial de la casa', 0.50, 10000, 'ml'),
+('Ketchup', 'Salsa de tomate', 0.20, 15000, 'ml'),
+('Mostaza', 'Mostaza amarilla', 0.20, 12000, 'ml'),
+('Mayonesa', 'Mayonesa casera', 0.30, 10000, 'ml'),
+('Guacamole', 'Guacamole fresco', 1.20, 5000, 'g');
+
+-- Asociación de ingredientes base a productos (sin cambios)
+-- McRaulo Cheese
+INSERT INTO productos_ingredientes_base (id_producto, id_ingrediente, cantidad) VALUES
+(1, 1, 1), -- Pan
+(1, 2, 1), -- Carne
+(1, 5, 2), -- Queso cheddar (2 fetas)
+(1, 6, 20), -- Lechuga (20g)
+(1, 7, 30), -- Tomate (30g)
+(1, 8, 15), -- Cebolla (15g)
+(1, 11, 15), -- Salsa especial (15ml)
+(1, 12, 10); -- Ketchup (10ml)
+
+-- McRaulo Veggie
+INSERT INTO productos_ingredientes_base (id_producto, id_ingrediente, cantidad) VALUES
+(2, 1, 1), -- Pan
+(2, 4, 1), -- Medallón veggie
+(2, 5, 1), -- Queso cheddar
+(2, 6, 25), -- Lechuga (25g)
+(2, 7, 30), -- Tomate (30g)
+(2, 8, 15), -- Cebolla (15g)
+(2, 9, 15), -- Pepinillos (15g)
+(2, 11, 15), -- Salsa especial (15ml)
+(2, 14, 10); -- Mayonesa (10ml)
+
+-- McRaulo Pollo
+INSERT INTO productos_ingredientes_base (id_producto, id_ingrediente, cantidad) VALUES
+(3, 1, 1), -- Pan
+(3, 3, 1), -- Pollo crispy
+(3, 5, 1), -- Queso cheddar
+(3, 6, 20), -- Lechuga (20g)
+(3, 7, 30), -- Tomate (30g)
+(3, 14, 15); -- Mayonesa (15ml)
+
+-- Ejemplo de pedidos
+INSERT INTO pedidos (fecha_hora, estado, total, metodo_pago) VALUES
+(1716056400, 'pendiente', 24.97, 'mercadopago'), -- 18 mayo 2025 15:00:00 UTC
+(1716142800, 'entregado', 32.48, 'efectivo'); -- 19 mayo 2025 15:00:00 UTC
+
+-- Productos del primer pedido (MODIFICADO - cada producto es una fila individual)
+-- Pedido 1: 1 McRaulo Cheese + 1 Papas fritas + 2 Coca-Cola + 1 Agua mineral
+INSERT INTO pedidos_productos (id_pedido, id_producto, subtotal, notas) VALUES
+-- McRaulo Cheese personalizada (sin cebolla, con bacon extra y guacamole extra)
+(1, 1, 11.69, 'Sin cebolla, con bacon extra y guacamole extra'),
+-- Papas fritas normales
+(1, 4, 3.99, NULL),
+-- Primera Coca-Cola
+(1, 6, 2.50, NULL),
+-- Segunda Coca-Cola
+(1, 6, 2.50, NULL),
+-- Agua mineral
+(1, 10, 1.50, NULL);
+
+-- Ingredientes personalizados del primer pedido
+-- Para la hamburguesa McRaulo Cheese (id_pedido_producto = 1)
+INSERT INTO pedidos_productos_ingredientes (id_pedido_producto, id_ingrediente, cantidad, es_extra) VALUES
+(1, 8, 0, FALSE), -- Sin cebolla (cantidad 0, no es extra)
+(1, 10, 2, TRUE), -- Extra bacon (2 unidades, es extra)
+(1, 15, 1, TRUE); -- Extra guacamole (1 unidad, es extra)
+
+-- Productos del segundo pedido (MODIFICADO - cada producto es una fila individual)
+-- Pedido 2: 1 McRaulo Veggie + 1 McRaulo Pollo + 1 Papas con cheddar + 1 Limonada
+INSERT INTO pedidos_productos (id_pedido, id_producto, subtotal, notas) VALUES
+-- McRaulo Veggie con queso extra
+(2, 2, 10.74, 'Con queso extra'),
+-- McRaulo Pollo sin tomate, bien cocido
+(2, 3, 9.49, 'Sin tomate, bien cocido'),
+-- Papas con cheddar normales
+(2, 5, 5.99, NULL),
+-- Limonada con poco hielo
+(2, 9, 3.50, 'Con poco hielo');
+
+-- Ingredientes personalizados del segundo pedido
+-- Para la hamburguesa McRaulo Veggie (id_pedido_producto = 5)
+INSERT INTO pedidos_productos_ingredientes (id_pedido_producto, id_ingrediente, cantidad, es_extra) VALUES
+(5, 5, 1, TRUE); -- Extra queso cheddar
+
+-- Para la hamburguesa McRaulo Pollo (id_pedido_producto = 6)
+INSERT INTO pedidos_productos_ingredientes (id_pedido_producto, id_ingrediente, cantidad, es_extra) VALUES
+(6, 7, 0, FALSE); -- Sin tomate
+
+-- EJEMPLO ADICIONAL: Pedido con múltiples hamburguesas iguales pero personalizadas diferente
+INSERT INTO pedidos (fecha_hora, estado, total, metodo_pago) VALUES
+(1716229200, 'en_preparacion', 45.96, 'tarjeta'); -- 20 mayo 2025 15:00:00 UTC
+
+-- Pedido 3: 3 McRaulo Cheese (cada una personalizada diferente)
+INSERT INTO pedidos_productos (id_pedido, id_producto, subtotal, notas) VALUES
+-- Primera McRaulo Cheese - normal
+(3, 1, 8.99, 'Normal, sin modificaciones'),
+-- Segunda McRaulo Cheese - sin lechuga, con bacon extra
+(3, 1, 10.49, 'Sin lechuga, con bacon extra'),  
+-- Tercera McRaulo Cheese - sin cebolla, sin tomate, doble queso, con guacamole
+(3, 1, 11.49, 'Sin cebolla, sin tomate, doble queso, con guacamole');
+
+-- Personalizaciones para cada hamburguesa individual
+-- Segunda hamburguesa (id_pedido_producto = 8)
+INSERT INTO pedidos_productos_ingredientes (id_pedido_producto, id_ingrediente, cantidad, es_extra) VALUES
+(8, 6, 0, FALSE), -- Sin lechuga
+(8, 10, 2, TRUE); -- Con bacon extra
+
+-- Tercera hamburguesa (id_pedido_producto = 9)  
+INSERT INTO pedidos_productos_ingredientes (id_pedido_producto, id_ingrediente, cantidad, es_extra) VALUES
+(9, 8, 0, FALSE), -- Sin cebolla
+(9, 7, 0, FALSE), -- Sin tomate
+(9, 5, 1, TRUE),  -- Queso extra (doble queso)
+(9, 15, 1, TRUE); -- Con guacamole

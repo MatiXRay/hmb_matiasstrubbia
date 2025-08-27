@@ -1,0 +1,103 @@
+metodo_pago:
+PK id_metodo_pago,
+NN nombre;
+
+compra:
+PK id_compra,
+NN fecha_hora,
+FK id_cliente,
+FK id_pedido,
+FK id_metodo_pago;
+
+movimiento_puntos:
+PK id_movimiento,
+NN descripcion,
+NN fecha_hora,
+NN tipo_movimiento,
+FK id_cliente,
+FK id_compra;
+
+cliente:
+PK id_cliente,
+NN nombre,
+NN email,
+NN contraseña,
+NN dni,
+NN telefono,
+NN puntos_acumulados;
+
+pedido:
+PK id_pedido,
+NN fecha_hora,
+NN total,
+NN numero_orden,
+FK id_estado_pedido,
+FK id_cliente,
+FK id_cupon;
+
+estado_pedido:
+PK id_estado_pedido,
+NN nombre_cliente,
+NN fecha_ingreso,
+NN fecha_salida,
+FK id_estado;
+
+estado:
+PK id_estado,
+NN nombre_estado;
+
+detalle_pedido:
+PK id_detalle_pedido,
+NN notas,
+NN subtotal,
+FK id_pedido,
+FK id_producto;
+
+detalle_pedido_ingrediente:
+PK FK id_detalle_pedido,
+PK FK id_ingrediente,
+NN cantidad,
+NN es_extra(boolean);
+
+producto:
+PK id_producto,
+NN nombre,
+NN descripcion,
+NN precio_base,
+FK id_categoria;
+
+
+categoria:
+PK id_categoria,
+NN nombre,
+NN elaborado(boolean);
+
+ingrediente_producto_base:
+PK FK id_producto,
+PK FK id_ingrediente,
+NN cantidad;
+
+ingrediente:
+PK id_ingrediente,
+NN nombre,
+NN descripcion,
+NN precio,
+NN unidad_medida;
+
+cupon:
+PK id_cupon,
+NN codigo_cupon,
+FK id_cliente;
+
+tipo_contribuyente:
+PK id_tipo_contribuyente,
+NN nombre;
+
+
+
+
+
+
+
+
+

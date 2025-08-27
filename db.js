@@ -37,7 +37,7 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
-console.log('🔌 Intentando conectar a la base de datos en Render.com...');
+console.log('🔌 Intentando conectar a la base de datos en Supabase.com...');
 // Ocultar la contraseña en los logs
 const safeUrl = process.env.DATABASE_URL.replace(/:[^:]*@/, ':****@');
 console.log(`🔗 URL: ${safeUrl}`);
